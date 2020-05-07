@@ -10,13 +10,18 @@ rho=1000;
 miu=0.89e-3;
 g=9.8;
 %条件
-q=5e-5;
+conditions=readmatrix("input.txt");
+iter_num=8;%迭代次数
+results=zeros(size(conditions,1),iter_num);
+for k=1:size(conditions,1)
+    
+%q=5e-5;
+q=conditions(k)*10^-5;%转换单位
 r0=5e-3;
 v0=q/pi/r0^2;
 h0=r0/2;
 
 %%
-iter_num=8;%迭代次数
 calc_num=8000;%最大计算步数
 deltar=0.00005;%计算步长
 r=r0:deltar:(r0+(calc_num-1)*deltar);
@@ -68,23 +73,28 @@ for j=1:iter_num
     h__r(1,j)=(h_r(2,j)-h_r(1,j))/deltar;
     %h__r(mark(j))=(h_r(mark(j))-h_r(mark(j)-1))/deltar;
 end
+results(k,:)=jump_mark';%收集结果
+end
+%%
+results=((results-1).*deltar+r0)*1000;%转换单位为mm
+writematrix(results,"output.txt");%输出
 
 %% 输出
-figure;
-for i=1:iter_num
-    plot(r(1:jump_mark(i))*1000,h(1:jump_mark(i),i)*1000);
-    hold on;
-end
-title('液膜高度h在不同r上分布');
-xlabel('r(mm)');
-ylabel('h(mm)');
-
-figure;
-plot(((jump_mark-1)*deltar+r0)*1000,'.-');
-title('水跃半径R_j随迭代次数变化');
-xlabel('迭代次数');
-ylabel('R_j(mm)');
-ylim([0 inf]);
+% figure;
+% for i=1:iter_num
+%     plot(r(1:jump_mark(i))*1000,h(1:jump_mark(i),i)*1000);
+%     hold on;
+% end
+% title('液膜高度h在不同r上分布');
+% xlabel('r(mm)');
+% ylabel('h(mm)');
+% 
+% figure;
+% plot(((jump_mark-1)*deltar+r0)*1000,'.-');
+% title('水跃半径R_j随迭代次数变化');
+% xlabel('迭代次数');
+% ylabel('R_j(mm)');
+% ylim([0 inf]);
 
 % figure;
 % title('速度');

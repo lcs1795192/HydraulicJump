@@ -1,35 +1,35 @@
-%% Ä£°å£ºÅĞ¶¨·½Ê½v_rĞ¡ÓÚ0
-%¸Äv_r,h_r,h__r
+ï»¿%% æ¨¡æ¿ï¼šåˆ¤å®šæ–¹å¼v_rå°äº0
+%æ”¹v_r,h_r,h__r
 clear;
 clc;
 close all;
-%³£Êı
+%å¸¸æ•°
 c2=1.2;
 sig=7.28e-2;
 rho=1000;
 miu=0.89e-3;
 g=9.8;
-%Ìõ¼ş
+%æ¡ä»¶
 q=5e-5;
 r0=5e-3;
 v0=q/pi/r0^2;
 h0=r0/2;
 
 %%
-iter_num=8;%µü´ú´ÎÊı
-calc_num=8000;%×î´ó¼ÆËã²½Êı
-deltar=0.00005;%¼ÆËã²½³¤
+iter_num=8;%è¿­ä»£æ¬¡æ•°
+calc_num=8000;%æœ€å¤§è®¡ç®—æ­¥æ•°
+deltar=0.00005;%è®¡ç®—æ­¥é•¿
 r=r0:deltar:(r0+(calc_num-1)*deltar);
 h=zeros(calc_num,iter_num);
 v=zeros(calc_num,iter_num);
 h(1,:)=h0;
 v(1,:)=v0;
-h_r=zeros(calc_num,iter_num);%h¶ÔrÒ»½×µ¼
-h__r=zeros(calc_num,iter_num);%h¶Ôr¶ş½×µ¼
-v_r=zeros(calc_num,iter_num);%v¶ÔrÒ»½×µ¼
+h_r=zeros(calc_num,iter_num);%hå¯¹rä¸€é˜¶å¯¼
+h__r=zeros(calc_num,iter_num);%hå¯¹räºŒé˜¶å¯¼
+v_r=zeros(calc_num,iter_num);%vå¯¹rä¸€é˜¶å¯¼
 
 jump_mark=zeros(iter_num,1);
-matrix=zeros(calc_num,iter_num);%·ÖÄ¸¾ØÕó
+matrix=zeros(calc_num,iter_num);%åˆ†æ¯çŸ©é˜µ
 
 %%
 a=g*q/2/pi;
@@ -43,9 +43,9 @@ for j=1:iter_num
         end_mark=jump_mark(j-1)+1;
     end
     for i=1:end_mark
-        denominator=c2*v(i,j)-a/r(i)/v(i,j)^2;%·ÖÄ¸
+        denominator=c2*v(i,j)-a/r(i)/v(i,j)^2;%åˆ†æ¯
         matrix(i,j)=denominator;
-        %ÅĞ¶¨
+        %åˆ¤å®š
         if denominator<0
             jump_mark(j)=i-1;
             break
@@ -69,25 +69,25 @@ for j=1:iter_num
     %h__r(mark(j))=(h_r(mark(j))-h_r(mark(j)-1))/deltar;
 end
 
-%% Êä³ö
+%% è¾“å‡º
 figure;
 for i=1:iter_num
     plot(r(1:jump_mark(i))*1000,h(1:jump_mark(i),i)*1000);
     hold on;
 end
-title('ÒºÄ¤¸ß¶ÈhÔÚ²»Í¬rÉÏ·Ö²¼');
+title('æ¶²è†œé«˜åº¦håœ¨ä¸åŒrä¸Šåˆ†å¸ƒ');
 xlabel('r(mm)');
 ylabel('h(mm)');
 
 figure;
 plot(((jump_mark-1)*deltar+r0)*1000,'.-');
-title('Ë®Ô¾°ë¾¶R_jËæµü´ú´ÎÊı±ä»¯');
-xlabel('µü´ú´ÎÊı');
+title('æ°´è·ƒåŠå¾„R_jéšè¿­ä»£æ¬¡æ•°å˜åŒ–');
+xlabel('è¿­ä»£æ¬¡æ•°');
 ylabel('R_j(mm)');
 ylim([0 inf]);
 
 % figure;
-% title('ËÙ¶È');
+% title('é€Ÿåº¦');
 % for i=1:iter_num
 %     semilogy(r(1:jump_mark(i))*1000,v(1:jump_mark(i),i));
 %     hold on;

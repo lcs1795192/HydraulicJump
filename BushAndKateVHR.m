@@ -1,5 +1,5 @@
-%% 模板：判定方式v_r小于0
-%改v_r,h_r,h__r
+%% 模板：判定方式u_r小于0
+%改u_r,h_r,h__r
 clear;
 clc;
 close all;
@@ -18,7 +18,7 @@ for k=1:size(conditions,1)
 %q=5e-5;
 q=conditions(k)*10^-5;%转换单位
 r0=5e-3;
-v0=q/pi/r0^2;
+u0=q/pi/r0^2;
 h0=r0/2;
 
 %%
@@ -26,12 +26,12 @@ calc_num=8000;%最大计算步数
 deltar=0.00005;%计算步长
 r=r0:deltar:(r0+(calc_num-1)*deltar);
 h=zeros(calc_num,iter_num);
-v=zeros(calc_num,iter_num);
+u=zeros(calc_num,iter_num);
 h(1,:)=h0;
-v(1,:)=v0;
+u(1,:)=u0;
 h_r=zeros(calc_num,iter_num);%h对r一阶导
 h__r=zeros(calc_num,iter_num);%h对r二阶导
-v_r=zeros(calc_num,iter_num);%v对r一阶导
+u_r=zeros(calc_num,iter_num);%u对r一阶导
 
 jump_mark=zeros(iter_num,1);
 matrix=zeros(calc_num,iter_num);%分母矩阵
@@ -48,7 +48,7 @@ for j=1:iter_num
         end_mark=jump_mark(j-1)+1;
     end
     for i=1:end_mark
-        denominator=c2*v(i,j)-a/r(i)/v(i,j)^2;%分母
+        denominator=c2*u(i,j)-a/r(i)/u(i,j)^2;%分母
         matrix(i,j)=denominator;
         %判定
         if denominator<0
@@ -56,15 +56,15 @@ for j=1:iter_num
             break
         end
         if j==1
-            v_r(i,j)=(a/r(i)^2/v(i,j)-b*r(i)^2*v(i,j)^3)/denominator;
+            u_r(i,j)=(a/r(i)^2/u(i,j)-b*r(i)^2*u(i,j)^3)/denominator;
         else
-            v_r(i,j)=(a/r(i)^2/v(i,j)-b*r(i)^2*v(i,j)^3-...
-                s*v(i,j)*h_r(i,j-1)*(r(i)*h__r(i,j-1)+h_r(i,j-1)+h_r(i,j-1)^3)/(1+h_r(i,j-1)^2)^1.5)...
+            u_r(i,j)=(a/r(i)^2/u(i,j)-b*r(i)^2*u(i,j)^3-...
+                s*u(i,j)*h_r(i,j-1)*(r(i)*h__r(i,j-1)+h_r(i,j-1)+h_r(i,j-1)^3)/(1+h_r(i,j-1)^2)^1.5)...
                 /denominator;
         end
-        v(i+1,j)=v(i,j)+deltar*v_r(i,j);
-        h_r(i,j)=q/2/pi*(-1/r(i)^2/v(i,j)-1/r(i)/v(i,j)^2*v_r(i,1));
-        h(i,j)=q/2/pi/r(i)/v(i,j);
+        u(i+1,j)=u(i,j)+deltar*u_r(i,j);
+        h_r(i,j)=q/2/pi*(-1/r(i)^2/u(i,j)-1/r(i)/u(i,j)^2*u_r(i,1));
+        h(i,j)=q/2/pi/r(i)/u(i,j);
     end
     
     for i=2:jump_mark(j)-1
@@ -99,7 +99,7 @@ writematrix(results,"output.txt");%输出
 % figure;
 % title('速度');
 % for i=1:iter_num
-%     semilogy(r(1:jump_mark(i))*1000,v(1:jump_mark(i),i));
+%     semilogy(r(1:jump_mark(i))*1000,u(1:jump_mark(i),i));
 %     hold on;
 % end
 

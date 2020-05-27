@@ -4,25 +4,27 @@ clear;
 clc;
 close all;
 %常数
-c2=1.2;
 FuelProperty;
+c2=1.2;
 g=9.8;
 %条件
-qNum=12;
-qSet=linspace(2.5e-5,25e-5,qNum)';
+QNum=12;
+Qmax=25e-5;
+Qmin=2.5e-5;
+QSet=linspace(Qmin,Qmax,QNum)';
 iter_num=8;%迭代次数
-results=zeros(qNum,iter_num);
-for k=1:qNum
+results=zeros(QNum,iter_num);
+for k=1:QNum
     
 %q=5e-5;
-q=qSet(k);%转换单位
+Q=QSet(k);%转换单位
 r0=5e-3;
-u0=q/pi/r0^2;
+u0=Q/pi/r0^2;
 h0=r0/2;
 
 %%
-calc_num=8000;%最大计算步数
-deltar=0.00005;%计算步长
+calc_num=1000000;%最大计算步数
+deltar=1e-6;%计算步长
 r=r0:deltar:(r0+(calc_num-1)*deltar);
 h=zeros(calc_num,iter_num);
 u=zeros(calc_num,iter_num);
@@ -36,9 +38,9 @@ jump_mark=zeros(iter_num,1);
 matrix=zeros(calc_num,iter_num);%分母矩阵
 
 %%
-a=g*q/2/pi;
-b=4*pi^2*miu/rho*3/q^2;
-s=2*pi*sig/q;
+a=g*Q/2/pi;
+b=4*pi^2*miu/rho*3/Q^2;
+c=2*pi*sig/Q;
 
 for j=1:iter_num
     if j==1
@@ -58,12 +60,12 @@ for j=1:iter_num
             u_r(i,j)=(a/r(i)^2/u(i,j)-b*r(i)^2*u(i,j)^3)/denominator;
         else
             u_r(i,j)=(a/r(i)^2/u(i,j)-b*r(i)^2*u(i,j)^3-...
-                s*u(i,j)*h_r(i,j-1)*(r(i)*h__r(i,j-1)+h_r(i,j-1)+h_r(i,j-1)^3)/(1+h_r(i,j-1)^2)^1.5)...
+                c*u(i,j)*h_r(i,j-1)*(r(i)*h__r(i,j-1)+h_r(i,j-1)+h_r(i,j-1)^3)/(1+h_r(i,j-1)^2)^1.5)...
                 /denominator;
         end
         u(i+1,j)=u(i,j)+deltar*u_r(i,j);
-        h_r(i,j)=q/2/pi*(-1/r(i)^2/u(i,j)-1/r(i)/u(i,j)^2*u_r(i,1));
-        h(i,j)=q/2/pi/r(i)/u(i,j);
+        h_r(i,j)=Q/2/pi*(-1/r(i)^2/u(i,j)-1/r(i)/u(i,j)^2*u_r(i,1));
+        h(i,j)=Q/2/pi/r(i)/u(i,j);
     end
     
     for i=2:jump_mark(j)-1
@@ -75,8 +77,8 @@ end
 results(k,:)=jump_mark';%收集结果
 end
 %%
-results=((results-1).*deltar+r0)*1000;%转换单位为mm
-writematrix(results,"output.txt");%输出
+results=((results-1).*deltar+r0);%转换单位为mm
+writematrix(results,"output.csv");%输出
 
 %% 输出
 % figure;
@@ -101,5 +103,6 @@ writematrix(results,"output.txt");%输出
 %     semilogy(r(1:jump_mark(i))*1000,u(1:jump_mark(i),i));
 %     hold on;
 % end
+post;
 disp("calc end");
 

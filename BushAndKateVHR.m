@@ -5,9 +5,7 @@ clc;
 close all;
 %常数
 c2=1.2;
-sig=7.28e-2;
-rho=1000;
-miu=0.89e-3;
+FuelProperty;
 g=9.8;
 %条件
 conditions=readmatrix("input.txt");
@@ -102,4 +100,5 @@ writematrix(results,"output.txt");%输出
 %     semilogy(r(1:jump_mark(i))*1000,u(1:jump_mark(i),i));
 %     hold on;
 % end
+disp("calc end");
 

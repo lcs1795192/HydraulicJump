@@ -14,10 +14,9 @@ Qmin=2.5e-5;
 QSet=linspace(Qmin,Qmax,QNum)';
 iter_num=8;%迭代次数
 results=zeros(QNum,iter_num);
-for k=1:QNum
+for step=1:QNum
     
-%q=5e-5;
-Q=QSet(k);%转换单位
+Q=QSet(step);
 r0=5e-3;
 u0=Q/pi/r0^2;
 h0=r0/2;
@@ -42,42 +41,42 @@ a=g*Q/2/pi;
 b=4*pi^2*miu/rho*3/Q^2;
 c=2*pi*sig/Q;
 
-for j=1:iter_num
-    if j==1
+for iter=1:iter_num
+    if iter==1
         end_mark=calc_num;
     else
-        end_mark=jump_mark(j-1)+1;
+        end_mark=jump_mark(iter-1)+1;
     end
     for i=1:end_mark
-        denominator=c2*u(i,j)-a/r(i)/u(i,j)^2;%分母
-        matrix(i,j)=denominator;
+        denominator=c2*u(i,iter)-a/r(i)/u(i,iter)^2;%分母
+        matrix(i,iter)=denominator;
         %判定
         if denominator<0
-            jump_mark(j)=i-1;
+            jump_mark(iter)=i-1;
             break
         end
-        if j==1
-            u_r(i,j)=(a/r(i)^2/u(i,j)-b*r(i)^2*u(i,j)^3)/denominator;
+        if iter==1
+            u_r(i,iter)=(a/r(i)^2/u(i,iter)-b*r(i)^2*u(i,iter)^3)/denominator;
         else
-            u_r(i,j)=(a/r(i)^2/u(i,j)-b*r(i)^2*u(i,j)^3-...
-                c*u(i,j)*h_r(i,j-1)*(r(i)*h__r(i,j-1)+h_r(i,j-1)+h_r(i,j-1)^3)/(1+h_r(i,j-1)^2)^1.5)...
+            u_r(i,iter)=(a/r(i)^2/u(i,iter)-b*r(i)^2*u(i,iter)^3-...
+                c*u(i,iter)*h_r(i,iter-1)*(r(i)*h__r(i,iter-1)+h_r(i,iter-1)+h_r(i,iter-1)^3)/(1+h_r(i,iter-1)^2)^1.5)...
                 /denominator;
         end
-        u(i+1,j)=u(i,j)+deltar*u_r(i,j);
-        h_r(i,j)=Q/2/pi*(-1/r(i)^2/u(i,j)-1/r(i)/u(i,j)^2*u_r(i,1));
-        h(i,j)=Q/2/pi/r(i)/u(i,j);
+        u(i+1,iter)=u(i,iter)+deltar*u_r(i,iter);
+        h_r(i,iter)=Q/2/pi*(-1/r(i)^2/u(i,iter)-1/r(i)/u(i,iter)^2*u_r(i,1));
+        h(i,iter)=Q/2/pi/r(i)/u(i,iter);
     end
     
-    for i=2:jump_mark(j)-1
-        h__r(i,j)=(h(i+1,j)+h(i-1,j)-2*h(i,j))/deltar^2;
+    for i=2:jump_mark(iter)-1
+        h__r(i,iter)=(h(i+1,iter)+h(i-1,iter)-2*h(i,iter))/deltar^2;
     end
-    h__r(1,j)=(h_r(2,j)-h_r(1,j))/deltar;
+    h__r(1,iter)=(h_r(2,iter)-h_r(1,iter))/deltar;
     %h__r(mark(j))=(h_r(mark(j))-h_r(mark(j)-1))/deltar;
 end
-results(k,:)=jump_mark';%收集结果
+results(step,:)=jump_mark';%收集结果
 end
 %%
-results=((results-1).*deltar+r0);%转换单位为mm
+results=(results-1).*deltar+r0;
 writematrix(results,"output.csv");%输出
 
 %% 输出

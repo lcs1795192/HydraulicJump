@@ -8,13 +8,14 @@ c2=1.2;
 FuelProperty;
 g=9.8;
 %条件
-conditions=readmatrix("input.txt");
+qNum=12;
+qSet=linspace(2.5e-5,25e-5,qNum)';
 iter_num=8;%迭代次数
-results=zeros(size(conditions,1),iter_num);
-for k=1:size(conditions,1)
+results=zeros(qNum,iter_num);
+for k=1:qNum
     
 %q=5e-5;
-q=conditions(k)*10^-5;%转换单位
+q=qSet(k);%转换单位
 r0=5e-3;
 u0=q/pi/r0^2;
 h0=r0/2;

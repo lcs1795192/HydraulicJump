@@ -10,7 +10,7 @@ g=9.8;
 %条件
 QNum=20;
 Qmax=25e-5;
-Qmin=2.5e-5;
+Qmin=1.8e-5;
 QSet=linspace(Qmin,Qmax,QNum)';
 iter_num=8;%迭代次数
 results=zeros(QNum,iter_num);

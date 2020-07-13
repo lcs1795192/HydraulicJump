@@ -16,13 +16,13 @@ f0=1.402;
 epis=1;
 
 %初始化
-R0=5e-3;
+R0=1e-3;
 theta=90/180*pi;
 
 %定义q得到uin或直接定义uin
 QNum=20;
-Qmax=25e-5;
-Qmin=1.8e-5;
+Qmax=40/3600/1000;
+Qmin=15/3600/1000;
 QSet=linspace(Qmin,Qmax,QNum)';
 uin=QSet/R0^2/pi;
 results=zeros(QNum,2);

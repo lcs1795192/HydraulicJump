@@ -5,41 +5,27 @@ clc;
 close all;
 %常数
 g=9.8;
-FuelProperty;
 c2=1.2;
+epis=0.7;
 f_0=3;
-% type=5;
-% switch type
-%     case 2
-%         c2=1.2;
-%         f_0=3;
-%     case 3
-%         c2=1.243429;
-%         f_0=2.4;
-%     case 4
-%         c2=1.268861;
-%         f_0=20/9;
-%     case 5
-%         c2=1.284919;
-%         f_0=15/7;
-% end
-%条件
+FuelProperty;
 QNum=20;
-Qmax=25e-5;
-Qmin=1.8e-5;
+Qmax=40/3600/1000;% m3/s
+Qmin=15/3600/1000;% m3/s
 QSet=linspace(Qmin,Qmax,QNum)';
 iter_num=8;%迭代次数
 results=zeros(QNum,iter_num);
 for step=1:QNum
     
     Q=QSet(step);
-    r0=5e-3;
-    u0=Q/pi/r0^2;
+    r0=0.5e-3;% m
+    u0=epis*Q/pi/r0^2;
     h0=r0/2;
     
     %%
-    calc_num=1000000;%最大计算步数
+    calc_num=100000;%最大计算步数
     deltar=0.5e-5;%计算步长
+    rMax=r0+(calc_num-1)*deltar;
     r=r0:deltar:(r0+(calc_num-1)*deltar);
     h=zeros(calc_num,iter_num);
     u=zeros(calc_num,iter_num);
@@ -92,19 +78,11 @@ for step=1:QNum
     results(step,:)=jump_mark';%收集结果
 end
 %%
-results=(results-1).*deltar+r0;
-writematrix(results,"MyCalcOut.csv");%输出
-
+results=r0+(results-1).*deltar;
+% writematrix(results,"MyCalcOut.csv");%输出
+resultsInmm=1000*results;% mm单位
 %% 输出
-% figure;
-% for i=1:iter_num
-%     plot(r(1:jump_mark(i))*1000,h(1:jump_mark(i),i)*1000);
-%     hold on;
-% end
-% title('液膜高度h在不同r上分布');
-% xlabel('r(mm)');
-% ylabel('h(mm)');
-%
+
 % figure;
 % plot(((jump_mark-1)*deltar+r0)*1000,'.-');
 % title('水跃半径R_j随迭代次数变化');
@@ -112,13 +90,6 @@ writematrix(results,"MyCalcOut.csv");%输出
 % ylabel('R_j(mm)');
 % ylim([0 inf]);
 
-% figure;
-% title('速度');
-% for i=1:iter_num
-%     semilogy(r(1:jump_mark(i))*1000,u(1:jump_mark(i),i));
-%     hold on;
-% end
-
-Post;
+% Post;
 disp("calc end");
 

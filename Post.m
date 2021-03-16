@@ -10,5 +10,4 @@ plot(QSet*1e5,results(:,1:3)*1e3);
 %legend('Kate-exp','Arak-exp','location','northwest');
 xlabel('Q(*1e-5 m3/h)');
 ylabel('R_j(mm)');
-title('R_j  Q');
 grid;

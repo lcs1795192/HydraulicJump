@@ -24,9 +24,9 @@ f_0=3;
 %         f_0=15/7;
 % end
 %条件
-QNum=20;
-Qmax=25e-5;
-Qmin=1.8e-5;
+QNum=5;
+Qmax=45/1000/3600;
+Qmin=15/1000/3600;
 QSet=linspace(Qmin,Qmax,QNum)';
 iter_num=8;%迭代次数
 results=zeros(QNum,iter_num);
@@ -90,21 +90,24 @@ for step=1:QNum
         %h__r(mark(j))=(h_r(mark(j))-h_r(mark(j)-1))/deltar;
     end
     results(step,:)=jump_mark';%收集结果
+    
+    figure(1);
+    hold on;
+    plot(r(1:jump_mark(3))*1000,h(1:jump_mark(3),3)*1000);
+    writematrix([r(1:jump_mark(3))'*1000,h(1:jump_mark(3),3)*1000],"filmHeight"+step+".csv");%输出
+    title('液膜厚度h在不同r上分布');
+    xlabel('r(mm)');
+    ylabel('h(mm)');
 end
 %%
 results=(results-1).*deltar+r0;
 writematrix(results,"MyCalcOut.csv");%输出
 
 %% 输出
-% figure;
-% for i=1:iter_num
-%     plot(r(1:jump_mark(i))*1000,h(1:jump_mark(i),i)*1000);
-%     hold on;
-% end
-% title('液膜高度h在不同r上分布');
-% xlabel('r(mm)');
-% ylabel('h(mm)');
-%
+
+
+
+
 % figure;
 % plot(((jump_mark-1)*deltar+r0)*1000,'.-');
 % title('水跃半径R_j随迭代次数变化');
@@ -119,6 +122,7 @@ writematrix(results,"MyCalcOut.csv");%输出
 %     hold on;
 % end
 
-Post;
+%%
+% Post;
 disp("calc end");
 

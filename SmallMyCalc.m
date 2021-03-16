@@ -9,8 +9,8 @@ c2=1.2;
 epis=0.7;
 f_0=3;
 FuelProperty;
-QNum=20;
-Qmax=40/3600/1000;% m3/s
+QNum=5;
+Qmax=45/3600/1000;% m3/s
 Qmin=15/3600/1000;% m3/s
 QSet=linspace(Qmin,Qmax,QNum)';
 iter_num=8;%迭代次数
@@ -36,7 +36,7 @@ for step=1:QNum
     u_r=zeros(calc_num,iter_num);%u对r一阶导
     
     jump_mark=zeros(iter_num,1);
-    matrix=zeros(calc_num,iter_num);%分母矩阵
+    matrix=zeros(calc_num,iter_num);%
     
     %%
     a=g*Q/2/pi;
@@ -76,6 +76,17 @@ for step=1:QNum
         %h__r(mark(j))=(h_r(mark(j))-h_r(mark(j)-1))/deltar;
     end
     results(step,:)=jump_mark';%收集结果
+    
+    figure(1);
+    hold on;
+    plot(r(1:jump_mark(3))*1000,h(1:jump_mark(3),3)*1000);
+        
+    figure(2);
+    hold on;
+    plot(r(1:jump_mark(3))*1000,u(1:jump_mark(3),3));
+    writematrix([r(1:jump_mark(3))'*1000,u(1:jump_mark(3),3)],"filmVelovity"+step+".csv");
+    
+    
 end
 %%
 results=r0+(results-1).*deltar;

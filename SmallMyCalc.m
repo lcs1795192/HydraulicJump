@@ -1,9 +1,9 @@
-%% ÅĞ¶¨·½Ê½u_rĞ¡ÓÚ0
+%% åˆ¤å®šæ–¹å¼u_rå°äº0
 %
 clear;
 clc;
 close all;
-%³£Êı
+%å¸¸æ•°
 g=9.8;
 c2=1.2;
 epis=0.7;
@@ -13,7 +13,7 @@ QNum=5;
 Qmax=45/3600/1000;% m3/s
 Qmin=15/3600/1000;% m3/s
 QSet=linspace(Qmin,Qmax,QNum)';
-iter_num=8;%µü´ú´ÎÊı
+iter_num=8;%è¿­ä»£æ¬¡æ•°
 results=zeros(QNum,iter_num);
 for step=1:QNum
     
@@ -23,17 +23,17 @@ for step=1:QNum
     h0=r0/2;
     
     %%
-    calc_num=100000;%×î´ó¼ÆËã²½Êı
-    deltar=0.5e-5;%¼ÆËã²½³¤
+    calc_num=100000;%æœ€å¤§è®¡ç®—æ­¥æ•°
+    deltar=0.5e-5;%è®¡ç®—æ­¥é•¿
     rMax=r0+(calc_num-1)*deltar;
     r=r0:deltar:(r0+(calc_num-1)*deltar);
     h=zeros(calc_num,iter_num);
     u=zeros(calc_num,iter_num);
     h(1,:)=h0;
     u(1,:)=u0;
-    h_r=zeros(calc_num,iter_num);%h¶ÔrÒ»½×µ¼
-    h__r=zeros(calc_num,iter_num);%h¶Ôr¶ş½×µ¼
-    u_r=zeros(calc_num,iter_num);%u¶ÔrÒ»½×µ¼
+    h_r=zeros(calc_num,iter_num);%hå¯¹rä¸€é˜¶å¯¼
+    h__r=zeros(calc_num,iter_num);%hå¯¹räºŒé˜¶å¯¼
+    u_r=zeros(calc_num,iter_num);%uå¯¹rä¸€é˜¶å¯¼
     
     jump_mark=zeros(iter_num,1);
     matrix=zeros(calc_num,iter_num);%
@@ -50,9 +50,9 @@ for step=1:QNum
             end_mark=jump_mark(iter-1)+1;
         end
         for i=1:end_mark
-            denominator=c2*u(i,iter)-a/r(i)/u(i,iter)^2;%·ÖÄ¸
+            denominator=c2*u(i,iter)-a/r(i)/u(i,iter)^2;%åˆ†æ¯
             matrix(i,iter)=denominator;
-            %ÅĞ¶¨
+            %åˆ¤å®š
             if denominator<0
                 jump_mark(iter)=i-1;
                 break
@@ -75,7 +75,7 @@ for step=1:QNum
         h__r(1,iter)=(h_r(2,iter)-h_r(1,iter))/deltar;
         %h__r(mark(j))=(h_r(mark(j))-h_r(mark(j)-1))/deltar;
     end
-    results(step,:)=jump_mark';%ÊÕ¼¯½á¹û
+    results(step,:)=jump_mark';%æ”¶é›†ç»“æœ
     
     figure(1);
     hold on;
@@ -90,14 +90,14 @@ for step=1:QNum
 end
 %%
 results=r0+(results-1).*deltar;
-% writematrix(results,"MyCalcOut.csv");%Êä³ö
-resultsInmm=1000*results;% mmµ¥Î»
-%% Êä³ö
+% writematrix(results,"MyCalcOut.csv");%è¾“å‡º
+resultsInmm=1000*results;% mmå•ä½
+%% è¾“å‡º
 
 % figure;
 % plot(((jump_mark-1)*deltar+r0)*1000,'.-');
-% title('Ë®Ô¾°ë¾¶R_jËæµü´ú´ÎÊı±ä»¯');
-% xlabel('µü´ú´ÎÊı');
+% title('æ°´è·ƒåŠå¾„R_jéšè¿­ä»£æ¬¡æ•°å˜åŒ–');
+% xlabel('è¿­ä»£æ¬¡æ•°');
 % ylabel('R_j(mm)');
 % ylim([0 inf]);
 

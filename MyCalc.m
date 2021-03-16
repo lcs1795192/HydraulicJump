@@ -1,9 +1,9 @@
-%% ÅĞ¶¨·½Ê½u_rĞ¡ÓÚ0
+%% åˆ¤å®šæ–¹å¼u_rå°äº0
 %
 clear;
 clc;
 close all;
-%³£Êı
+%å¸¸æ•°
 g=9.8;
 FuelProperty;
 c2=1.2;
@@ -23,12 +23,12 @@ f_0=3;
 %         c2=1.284919;
 %         f_0=15/7;
 % end
-%Ìõ¼ş
+%æ¡ä»¶
 QNum=5;
 Qmax=45/1000/3600;
 Qmin=15/1000/3600;
 QSet=linspace(Qmin,Qmax,QNum)';
-iter_num=8;%µü´ú´ÎÊı
+iter_num=8;%è¿­ä»£æ¬¡æ•°
 results=zeros(QNum,iter_num);
 for step=1:QNum
     
@@ -38,19 +38,19 @@ for step=1:QNum
     h0=r0/2;
     
     %%
-    calc_num=1000000;%×î´ó¼ÆËã²½Êı
-    deltar=0.5e-5;%¼ÆËã²½³¤
+    calc_num=1000000;%æœ€å¤§è®¡ç®—æ­¥æ•°
+    deltar=0.5e-5;%è®¡ç®—æ­¥é•¿
     r=r0:deltar:(r0+(calc_num-1)*deltar);
     h=zeros(calc_num,iter_num);
     u=zeros(calc_num,iter_num);
     h(1,:)=h0;
     u(1,:)=u0;
-    h_r=zeros(calc_num,iter_num);%h¶ÔrÒ»½×µ¼
-    h__r=zeros(calc_num,iter_num);%h¶Ôr¶ş½×µ¼
-    u_r=zeros(calc_num,iter_num);%u¶ÔrÒ»½×µ¼
+    h_r=zeros(calc_num,iter_num);%hå¯¹rä¸€é˜¶å¯¼
+    h__r=zeros(calc_num,iter_num);%hå¯¹räºŒé˜¶å¯¼
+    u_r=zeros(calc_num,iter_num);%uå¯¹rä¸€é˜¶å¯¼
     
     jump_mark=zeros(iter_num,1);
-    matrix=zeros(calc_num,iter_num);%·ÖÄ¸¾ØÕó
+    matrix=zeros(calc_num,iter_num);%åˆ†æ¯çŸ©é˜µ
     
     %%
     a=g*Q/2/pi;
@@ -64,9 +64,9 @@ for step=1:QNum
             end_mark=jump_mark(iter-1)+1;
         end
         for i=1:end_mark
-            denominator=c2*u(i,iter)-a/r(i)/u(i,iter)^2;%·ÖÄ¸
+            denominator=c2*u(i,iter)-a/r(i)/u(i,iter)^2;%åˆ†æ¯
             matrix(i,iter)=denominator;
-            %ÅĞ¶¨
+            %åˆ¤å®š
             if denominator<0
                 jump_mark(iter)=i-1;
                 break
@@ -89,34 +89,34 @@ for step=1:QNum
         h__r(1,iter)=(h_r(2,iter)-h_r(1,iter))/deltar;
         %h__r(mark(j))=(h_r(mark(j))-h_r(mark(j)-1))/deltar;
     end
-    results(step,:)=jump_mark';%ÊÕ¼¯½á¹û
+    results(step,:)=jump_mark';%æ”¶é›†ç»“æœ
     
     figure(1);
     hold on;
     plot(r(1:jump_mark(3))*1000,h(1:jump_mark(3),3)*1000);
-    writematrix([r(1:jump_mark(3))'*1000,h(1:jump_mark(3),3)*1000],"filmHeight"+step+".csv");%Êä³ö
-    title('ÒºÄ¤ºñ¶ÈhÔÚ²»Í¬rÉÏ·Ö²¼');
+    writematrix([r(1:jump_mark(3))'*1000,h(1:jump_mark(3),3)*1000],"filmHeight"+step+".csv");%è¾“å‡º
+    title('æ¶²è†œåšåº¦håœ¨ä¸åŒrä¸Šåˆ†å¸ƒ');
     xlabel('r(mm)');
     ylabel('h(mm)');
 end
 %%
 results=(results-1).*deltar+r0;
-writematrix(results,"MyCalcOut.csv");%Êä³ö
+writematrix(results,"MyCalcOut.csv");%è¾“å‡º
 
-%% Êä³ö
+%% è¾“å‡º
 
 
 
 
 % figure;
 % plot(((jump_mark-1)*deltar+r0)*1000,'.-');
-% title('Ë®Ô¾°ë¾¶R_jËæµü´ú´ÎÊı±ä»¯');
-% xlabel('µü´ú´ÎÊı');
+% title('æ°´è·ƒåŠå¾„R_jéšè¿­ä»£æ¬¡æ•°å˜åŒ–');
+% xlabel('è¿­ä»£æ¬¡æ•°');
 % ylabel('R_j(mm)');
 % ylim([0 inf]);
 
 % figure;
-% title('ËÙ¶È');
+% title('é€Ÿåº¦');
 % for i=1:iter_num
 %     semilogy(r(1:jump_mark(i))*1000,u(1:jump_mark(i),i));
 %     hold on;

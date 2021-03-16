@@ -1,6 +1,6 @@
 figure;
 hold on;
-%ѡһ��
+%选一个
 plot(QSet*1e5,results(:,1:3)*1e3);
 % plot(QSet*1e5,results*1e3);
 % exp=csvread('ExpDataInKate.csv',1,0);
